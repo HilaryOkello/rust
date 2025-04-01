@@ -1,5 +1,5 @@
-pub fn sum(a: u8, b: u8 X) -> u16 {
-    a + b
+pub fn sum(a: u8, b: u8) -> u16 {
+    a as u16 + b as u16
 }
 
 pub fn diff(a: i16, b: i16) -> i16 {
@@ -7,7 +7,7 @@ pub fn diff(a: i16, b: i16) -> i16 {
 }
 
 pub fn pro(a: i8, b: i8) -> i16 {
-    a * b
+    a as i16 * b as i16
 }
 
 pub fn quo(a: i32, b: i32) -> i32 {

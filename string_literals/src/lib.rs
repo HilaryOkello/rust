@@ -1,5 +1,5 @@
 pub fn is_empty(v: &str) -> bool {
-    v,is_empty()
+    v.is_empty()
 }
 
 pub fn is_ascii(v: &str) -> bool {

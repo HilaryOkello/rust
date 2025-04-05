@@ -31,7 +31,7 @@ impl Circle {
         PI * self.radius.powi(2)
     }
 
-    pub fn intersect(self, other: &Circle) -> bool {
-        self.center.distance(&other.center) <= self.radius + other.radius
+    pub fn intersect(self, other: Circle) -> bool {
+        self.center.distance(other.center) <= self.radius + other.radius
     }
 }

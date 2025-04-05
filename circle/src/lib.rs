@@ -4,7 +4,7 @@ use std::f64::consts::PI;
 pub struct Point (pub f64, pub f64);
 
 impl Point {
-    pub fn distance(&self, other: &Point) -> f64 {
+    pub fn distance(self, other: Point) -> f64 {
         ((self.0 - other.0).powi(2) + (self.1 - other.1).powi(2)).sqrt()
     }
 }

@@ -23,7 +23,7 @@ pub fn check_ms(message: &str) -> Result<&str, &str> {
 
     match msg.send_ms() {
         Some(_) => Ok(message),
-        None => Err("Message contains profanity"),
+        None => Err("ERROR: illegal"),
     }
 
 }

@@ -22,7 +22,7 @@ pub fn check_ms(message: &str) -> Result<&str, &str> {
     let msg =  Message::new(message.to_string(), "user".to_string());
 
     match msg.send_ms() {
-        Some(_) => Ok("Message sent"),
+        Some(_) => Ok(message),
         None => Err("Message contains profanity"),
     }
 

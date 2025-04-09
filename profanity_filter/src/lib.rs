@@ -19,7 +19,7 @@ impl Message {
 }
 
 pub fn check_ms(message: &str) -> Result<&str, &str> {
-    msg :=  Mesage::new(message.to_string(), "user".to_string());
+    let msg =  Message::new(message.to_string(), "user".to_string());
 
     match msg.send_ms() {
         Some(_) => Ok("Message sent"),

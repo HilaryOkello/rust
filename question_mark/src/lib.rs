@@ -1,4 +1,4 @@
-pub struct Open {
+pub struct One {
     first_layer: Option<Two>
 }
 
@@ -23,4 +23,5 @@ impl One {
         let three = two.second_layer?;
         let four = three.third_layer?;
         four.fourth_layer
+    }
 }

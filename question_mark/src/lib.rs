@@ -4,17 +4,17 @@ pub struct One {
 
 
 pub struct Two {
-    second_layer: Option<Three>
+    pub second_layer: Option<Three>
 }
 
 
 pub struct Three {
-    third_layer: Option<Four>
+    pub third_layer: Option<Four>
 }
 
 
 pub struct Four {
-    fourth_layer: Option<u16>
+    pub fourth_layer: Option<u16>
 }
 
 impl One {

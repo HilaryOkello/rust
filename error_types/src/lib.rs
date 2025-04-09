@@ -2,9 +2,9 @@ use chrono;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct FormError {
-    form_values: Vec<(String, String)>,
-    date: String,
-    err: String,
+   pub form_values: Vec<(String, String)>,
+    pub date: String,
+    pub err: String,
 }
 
 impl FormError {
@@ -20,8 +20,8 @@ impl FormError {
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct Form {
-    name: String,
-    password: String
+    pub name: String,
+    pub password: String,
 }
 
 impl Form {

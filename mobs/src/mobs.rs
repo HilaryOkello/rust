@@ -1,10 +1,12 @@
+
 pub mod boss;
 pub mod member;
 
-use boss::Boss;
-use member::{Member, Role};
+pub use boss::*;
+pub use member::*;
 
-#[derive(Debug, Clone)]
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Mob {
     pub name: String,
     pub boss: Boss,
@@ -12,71 +14,67 @@ pub struct Mob {
     pub cities: Vec<(String, u8)>,
     pub wealth: u32,
 }
-
 impl Mob {
-    // Method to recruit a new member into the mob
-    pub fn recruit(&mut self, member_name: &str, member_age: u8) {
-        self.members
-            .push(Member::new(member_name, Role::Associate, member_age));
+    pub fn recruit(&mut self, name: &str, age: u8) {
+        self.members.push(Member::new(name ,Role::Associate , age))
     }
 
-    // Method to initiate an attack on another mob
-    pub fn attack(&mut self, target: &mut Mob) {
-        if calculate_power(self) > calculate_power(target) {
-            target.members.pop();
+    pub fn attack(&mut self, mob: Mob) {
+        let mut atk_score: u32 = 0;
+        let mut def_score: u32 = 0;
+
+        for member in &mut self.members {
+            match member.role {
+                Role::Underboss => atk_score += 4,
+                Role::Caporegime => atk_score += 3,
+                Role::Soldier => atk_score += 2,
+                Role::Associate => atk_score += 1,
+            }
+        }
+        for member in &mut mob.members {
+            match member.role {
+                Role::Underboss => def_score += 4,
+                Role::Caporegime => def_score += 3,
+                Role::Soldier => def_score += 2,
+                Role::Associate => def_score += 1,
+            }
+        }
+        if atk_score > def_score {
+            mob.members.pop();
+            if mob.members.len() == 0 {
+                self.wealth += mob.wealth;
+                mob.wealth = 0;
+                self.cities.append(&mut mob.cities)
+            }
         } else {
             self.members.pop();
-        }
-        if self.members.is_empty() {
-            switch_cities(target, self);
-            target.wealth += self.wealth;
-            self.cities = vec![];
-            self.wealth = 0;
-        } else if target.members.is_empty() {
-            switch_cities(self, target);
-            self.wealth += target.wealth;
-            target.cities = vec![];
-            target.wealth = 0;
-        }
+            if self.members.len() == 0 {
+                mob.wealth += self.wealth;
+                self.wealth = 0;
+                mob.cities.append(&mut self.cities)
+            }
+        } 
     }
 
-    // Method to steal wealth from another mob
-    pub fn steal(&mut self, target: &mut Mob, value: u32) {
-        if target.wealth >= value {
-            self.wealth += value;
-            target.wealth -= value;
-        } else {
-            self.wealth += target.wealth;
-            target.wealth = 0;
+    pub fn steal(&mut self, mob:&mut Mob, mut value: u32) {
+        if mob.wealth <= value {
+            value = mob.wealth;
         }
+        mob.wealth -= value;
+        self.wealth += value;
     }
 
-    // Method to conquer a city from other mobs
-    pub fn conquer_city(&mut self, mobs: Vec<Mob>, wanted_city: String, value: u8) {
-        if !mobs
-            .into_iter()
-            .any(|ele| ele.cities.iter().any(|(city, _)| city == &wanted_city))
-        {
-            self.cities.push((wanted_city, value));
+    pub fn conquer_city(&mut self, mobs: Vec<Mob>, city_name: String, value: u8) {
+        let mut is_taked = false;
+        for mob in mobs {
+            for city in mob.cities {
+                if city.0 == city_name {
+                    is_taked = true;
+                }
+            }
         }
-    }
-}
-
-fn calculate_power(mob: &Mob) -> usize {
-    let mut result = 0;
-    for member in &mob.members {
-        match member.role {
-            Role::Underboss => result += 4,
-            Role::Caporegime => result += 3,
-            Role::Soldier => result += 2,
-            Role::Associate => result += 1,
+        if is_taked == false {
+            self.cities.push((city_name , value ));
         }
-    }
-    result
-}
-
-fn switch_cities(winner: &mut Mob, loser: &Mob) {
-    for city in &loser.cities {
-        winner.cities.push(city.clone());
     }
 }

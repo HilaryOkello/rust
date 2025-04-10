@@ -1,2 +1,3 @@
 mod mobs;
-pub use crate::mobs::*;
+
+pub use mobs::*;

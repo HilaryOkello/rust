@@ -1,4 +1,3 @@
-mod areas_volumes;
 
 pub use areas_volumes::GeometricalShapes;
 pub use areas_volumes::GeometricalVolumes;

@@ -1,43 +1,44 @@
-
-pub use areas_volumes::GeometricalShapes;
-pub use areas_volumes::GeometricalVolumes;
-use areas_volumes::*;
+pub use crate::areas_volumes::{GeometricalShapes, GeometricalVolumes};
+pub mod areas_volumes;
 
 pub fn area_fit(
-    x: usize,
-    y: usize,
-    objects: GeometricalShapes, 
-    times: usize,
-    a: usize,
-    b: usize,
+	x: usize,
+	y: usize,
+	objects: areas_volumes::GeometricalShapes,
+	times: usize,
+	a: usize,
+	b: usize,
 ) -> bool {
-    let area = x * y;
-    let object_area = match objects {
-        GeometricalShapes::Square => square_area(a) as f64,
-        GeometricalShapes::Circle => circle_area(a),
-        GeometricalShapes::Rectangle => rectangle_area(a, b) as f64,
-        GeometricalShapes::Triangle => triangle_area(a, b),
+    let unit_area = match objects {
+        GeometricalShapes::Square => areas_volumes::square_area(a) as f64,
+        GeometricalShapes::Triangle => areas_volumes::triangle_area(a, b),
+        GeometricalShapes::Circle => areas_volumes::circle_area(a),
+        GeometricalShapes::Rectangle => areas_volumes::rectangle_area(a, b)  as f64,
     };
-    (object_area * times as f64) <= area as f64
-}
 
+    let all_units_area = times as f64 * unit_area;
+
+    return (x * y) as f64 > all_units_area; 
+}
 pub fn volume_fit(
-    x: usize,
-    y: usize,
-    z: usize,
-    objects: GeometricalVolumes, // Now you can use the re-exported type directly
-    times: usize,
-    a: usize,
-    b: usize,
-    c: usize,
+	x: usize,
+	y: usize,
+	z: usize,
+	objects: areas_volumes::GeometricalVolumes,
+	times: usize,
+	a: usize,
+	b: usize,
+	c: usize,
 ) -> bool {
-    let volume = x * y * z;
-    let object_volume = match objects {
-        GeometricalVolumes::Cube => cube_volume(a) as f64,
-        GeometricalVolumes::Sphere => sphere_volume(a),
-        GeometricalVolumes::Cone => cone_volume(a, b),
-        GeometricalVolumes::Pyramid => triangular_pyramid_volume(a as f64, b),
-        GeometricalVolumes::Parallelepiped => parallelepiped_volume(a, b, c) as f64,
+    let unit_volume = match objects {
+        GeometricalVolumes::Cone => areas_volumes::cone_volume(a, b),
+        GeometricalVolumes::Cube => areas_volumes::cube_volume(a) as f64,
+        GeometricalVolumes::Parallelepiped => areas_volumes::parallelepiped_volume(a, b, c) as f64,
+        GeometricalVolumes::Pyramid => areas_volumes::triangular_pyramid_volume(a as f64, b),
+        GeometricalVolumes::Sphere => areas_volumes::sphere_volume(a),
     };
-    (object_volume * times as f64) <= volume as f64
+
+    let all_units_area = times as f64 * unit_volume;
+
+    return (x * y * z) as f64 > all_units_area;
 }

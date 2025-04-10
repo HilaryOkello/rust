@@ -1,5 +1,5 @@
-use chrono::{Datelike, NaiveDate};
-use chrono::Weekday as wd;
+pub use chrono::{Datelike, NaiveDate};
+pub use chrono::Weekday as wd;
 
 pub fn middle_day(year: i32) -> Option<wd> {
     let first_day = NaiveDate::from_ymd_opt(year, 1, 1)?;

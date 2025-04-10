@@ -1,6 +1,7 @@
-use chrono::{Datelike, NaiveDate, Weekday};
+use chrono::{Datelike, NaiveDate};
+use chrono::Weekday as wd;
 
-pub fn middle_day(year: i32) -> Option<Weekday> {
+pub fn middle_day(year: i32) -> Option<wd> {
     let first_day = NaiveDate::from_ymd_opt(year, 1, 1)?;
     let last_day = NaiveDate::from_ymd_opt(year, 12, 31)?;
     let days_in_year = last_day.signed_duration_since(first_day).num_days() as u32 + 1;

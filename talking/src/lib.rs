@@ -10,6 +10,6 @@ pub fn talking(text: &str) -> &str {
         (true, true) => "Quiet, I am thinking!",
         (true, false) => "Sure.",
         (false, true) => "There is no need to yell, calm down!",
-        (false, false) => "Interesting.",
+        (false, false) => "Interesting",
     }
 }

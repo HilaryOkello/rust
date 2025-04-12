@@ -1,38 +1,39 @@
-pub fn pig_latin(text: &str) -> String {
-    let vowels = "aeiou";
-    let mut pig_latin_word = String::new();
-    let mut first_vowel_index = None;
-
-    for (i, c) in text.chars().enumerate() {
-        if vowels.contains(c) {
-            first_vowel_index = Some(i);
-            break;
-        }
+fn is_vowel(c: char) -> bool {
+    match c {
+        'a' | 'e' | 'i' | 'o' | 'u' => true,
+        _ => false,
     }
+}
 
-    match first_vowel_index {
-        Some(index) => {
-            if index == 0 {
-                pig_latin_word.push_str(text);
-                pig_latin_word.push_str("ay");
-            } else {
-                let prefix = &text[..index];
-                let suffix = &text[index..];
-                if prefix.ends_with("qu") && index >= 2 {
-                    pig_latin_word.push_str(suffix);
-                    pig_latin_word.push_str(prefix);
-                } else {
-                    pig_latin_word.push_str(suffix);
-                    pig_latin_word.push_str(prefix);
+pub fn pig_latin(text: &str) -> String {
+    let word_lower = text.to_lowercase();
+    let vowels = ['a', 'e', 'i', 'o', 'u'];
+
+    if let Some(first_char) = word_lower.chars().next() {
+        if is_vowel(first_char) {
+            return format!("{}{}", text, "ay");
+        } else if word_lower.len() >= 3 && !is_vowel(word_lower.chars().nth(0).unwrap()) && word_lower.chars().nth(1) == Some('q') && word_lower.chars().nth(2) == Some('u') {
+            let prefix = &text[0..3];
+            let suffix = &text[3..];
+            return format!("{}{}{}", suffix, prefix, "ay");
+        } else {
+            let mut first_vowel_index = None;
+            for (i, c) in word_lower.chars().enumerate() {
+                if vowels.contains(&c) {
+                    first_vowel_index = Some(i);
+                    break;
                 }
-                pig_latin_word.push_str("ay");
+            }
+
+            if let Some(index) = first_vowel_index {
+                let prefix = &text[0..index];
+                let suffix = &text[index..];
+                return format!("{}{}{}", suffix, prefix, "ay");
+            } else {
+                return format!("{}{}", text, "ay");
             }
         }
-        None => {
-            pig_latin_word.push_str(text);
-            pig_latin_word.push_str("ay");
-        }
+    } else {
+        return String::new();
     }
-
-    pig_latin_word
 }

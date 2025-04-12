@@ -1,6 +1,6 @@
 pub fn number_logic(num: u32) -> bool {
     let len = num.to_string().len();
-    let mut n = num
+    let mut n = num;
     let mut sum = 0;
 
     while n > 0 {

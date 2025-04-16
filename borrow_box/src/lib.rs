@@ -29,6 +29,9 @@ impl GameSession {
         if self.p1.1 + self.p2.1 >= self.nb_games {
             return;
         }
+        if self.p1.1 == self.nb_games/2 +1 || self.p2.1 == self.nb_games/2 +1 {
+            return;
+        }
         if self.p1.0 == user_name {
                 self.p1.1 += 1;
         }

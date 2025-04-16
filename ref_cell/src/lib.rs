@@ -3,9 +3,8 @@ pub mod messenger;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
-use messenger::Logger;
+pub use messenger::{Logger, Tracker};
 
-pub use crate::messenger::Tracker;
 pub struct Worker {
     pub track_value: Rc<usize>,
     pub mapped_messages: RefCell<HashMap<String, String>>,
@@ -23,13 +22,6 @@ impl Worker {
 }
 
 impl Logger for Worker {
-    fn warning(&self, msg: &str) {
-        self.mapped_messages
-            .borrow_mut()
-            .insert("Warning".to_string(), msg.to_string());
-        self.all_messages.borrow_mut().push(msg.to_string());
-    }
-
     fn info(&self, msg: &str) {
         self.mapped_messages
             .borrow_mut()
@@ -41,6 +33,13 @@ impl Logger for Worker {
         self.mapped_messages
             .borrow_mut()
             .insert("Error".to_string(), msg.to_string());
+        self.all_messages.borrow_mut().push(msg.to_string());
+    }
+
+    fn warning(&self, msg: &str) {
+        self.mapped_messages
+            .borrow_mut()
+            .insert("Warning".to_string(), msg.to_string());
         self.all_messages.borrow_mut().push(msg.to_string());
     }
 }

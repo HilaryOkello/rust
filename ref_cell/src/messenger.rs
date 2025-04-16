@@ -1,37 +1,43 @@
-pub trait Logger {
-    fn warning(&self, msg: &str);
+pub use std:: rc::Rc;
+
+
+pub struct Tracker<'a> {
+    pub logger: &'a dyn Logger,
+    pub value: Rc<i32>,
+    pub max: i32,
+}
+
+pub trait Logger  {
     fn info(&self, msg: &str);
     fn error(&self, msg: &str);
+    fn warning(&self, msg: &str);
 }
 
-pub struct Tracker<'a, T> {
-    logger: &'a T,
-    max: usize,
-}
+impl <'a>Tracker<'a> {
 
-impl<'a, T: Logger> Tracker<'a, T> {
-    pub fn new(logger: &'a T, max: usize) -> Self {
-        Tracker { logger, max }
-    }
+  pub  fn new(logger: &'a dyn Logger ,num:i32) -> Tracker<'a> {
 
-    pub fn set_value(&self, current_value: &std::rc::Rc<usize>) {
-        let value = std::rc::Rc::strong_count(current_value) - 1; // Subtract 1 for the strong count held by Worker
-        let percentage = (value as f64 / self.max as f64) * 100.0;
-
-        if percentage >= 100.0 {
-            self.logger.error("Error: you are over your quota!");
-        } else if percentage >= 70.0 {
-            self.logger.warning(&format!(
-                "Warning: you have used up over {}% of your quota! Proceeds with precaution",
-                percentage.round()
-            ));
+       Tracker{
+            logger,
+            value: Rc::new(num),
+            max:num,
         }
     }
+   pub  fn set_value(&self,num: &Rc<usize>) {
+    
+        let count = Rc::strong_count(num);
+        let percent = (count * 100) / self.max as usize;
+        if percent >= 70 &&percent<100{
+            self.logger.warning( format!("Warning: you have used up over {}% of your quota! Proceeds with precaution", percent).as_str());
+        }
+        if percent >= 100 {
+            self.logger.error( "Error: you are over your quota!");
+        }
+    }
+    pub fn peek(&self,num: &Rc<usize>) {
 
-    pub fn peek(&self, current_value: &std::rc::Rc<usize>) {
-        let current = std::rc::Rc::strong_count(current_value) - 1; // Subtract 1 for the strong count held by Worker
-        let percentage = (current as f64 / self.max as f64) * 100.0;
-        self.logger
-            .info(&format!("Info: you are using up to {}% of your quota", percentage.round()));
+        let count = Rc::strong_count(&num);
+        let percent = (count * 100) / self.max as usize;
+        self.logger.info(format!("Info: you are using up to {}% of your quota", percent).as_str());
     }
 }

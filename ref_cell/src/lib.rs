@@ -1,9 +1,9 @@
 pub mod messenger;
 
-use std::cell::RefCell;
-use std::collections::HashMap;
-use std::rc::Rc;
-pub use messenger::{Logger, Tracker};
+pub use std::cell::RefCell;
+pub use std::collections::HashMap;
+pub use std::rc::Rc;
+pub use messenger::*;
 
 pub struct Worker {
     pub track_value: Rc<usize>,

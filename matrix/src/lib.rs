@@ -1,10 +1,50 @@
-// matrix/src/lib.rs
-use lalgebra_scalar::Scalar; 
+use std::ops::{Add, Sub, Mul, Div};
+use std::fmt::Debug;
+use std::default::Default;
+use std::marker::Copy;
+use std::cmp::PartialEq;
+
+
+pub trait Scalar: Add<Output = Self> + Sub<Output = Self> + Mul<Output = Self> + Div<Output = Self> + Sized + Copy + Default + PartialEq + Debug {
+    fn zero() -> Self;
+    fn one() -> Self;
+}
+
+impl Scalar for u32 {
+    fn zero() -> Self { 0 }
+    fn one() -> Self { 1 }
+}
+
+impl Scalar for u64 {
+    fn zero() -> Self { 0 }
+    fn one() -> Self { 1 }
+}
+
+impl Scalar for i32 {
+    fn zero() -> Self { 0 }
+    fn one() -> Self { 1 }
+}
+
+impl Scalar for i64 {
+    fn zero() -> Self { 0 }
+    fn one() -> Self { 1 }
+}
+
+impl Scalar for f32 {
+    fn zero() -> Self { 0.0 }
+    fn one() -> Self { 1.0 }
+}
+
+impl Scalar for f64 {
+    fn zero() -> Self { 0.0 }
+    fn one() -> Self { 1.0 }
+}
+
 
 #[derive(Debug, PartialEq)]
 pub struct Matrix<T>(pub Vec<Vec<T>>);
 
-impl<T: Scalar<Item = T>> Matrix<T> {
+impl<T: Scalar> Matrix<T> {
     pub fn new() -> Matrix<T> {
         Matrix(vec![vec![T::zero()]])
     }
